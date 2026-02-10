@@ -9,7 +9,7 @@
     <ion-content>
       <Nav></Nav>
 
-      Resources page
+      Updoot this to be the websocket page
     </ion-content>
   </ion-page>
 </template>

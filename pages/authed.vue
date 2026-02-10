@@ -31,7 +31,7 @@
   </ion-page>
 </template>
 
-<script setup>
+<!-- <script setup>
 const newsItems = ref([]);
 
 async function test() {
@@ -42,6 +42,32 @@ async function test() {
 
   console.log('testing: ', response);
   newsItems.value = response.rssItems; // Assuming your API returns the array directly
+}
+
+function formatDate(dateString) {
+  return new Date(dateString).toLocaleDateString();
+}
+</script> -->
+
+<script setup>
+const newsItems = ref([]);
+const { post } = useApi()
+
+async function test() {
+  try {
+    console.log('testing ');
+    const data = await post('/api/dream/news', {}, {
+      headers: {
+        loginToken: localStorage.loginToken
+      }
+    })
+    // success logic
+    console.log('testing: ', data);
+    newsItems.value = JSON.parse(data);
+  } catch (err) {
+    console.log(err);
+    // error handling
+  }
 }
 
 function formatDate(dateString) {

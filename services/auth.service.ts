@@ -1,5 +1,7 @@
 import { Preferences } from '@capacitor/preferences';
 import { useRuntimeConfig } from '#imports';
+import { Capacitor } from '@capacitor/core';
+import { CapacitorHttp } from '@capacitor/core';  // from core
 
 export interface User {
   id: string;
@@ -25,9 +27,61 @@ class AuthService {
       Preferences.get({ key: 'user_data' })
     ]);
 
-    if (token && userData) {
+    if (token && userData && userData != 'undefined') {
       this.token = token;
-      this.user = JSON.parse(userData);
+      this.user = userData;
+    }
+  }
+
+  // In your service
+  async login2(username: string, password: string) {
+    const isNative = Capacitor.isNativePlatform()  // from @capacitor/core
+
+    if (isNative) {
+      // Native bypasses CORS
+      const response = await CapacitorHttp.request({
+        method: 'POST',
+        url: `${useRuntimeConfig().public.apiBase}/api/login`,
+        data: { username, password },
+        headers: { 'Content-Type': 'application/json' },
+      })
+
+      if (!response || response.data == '400' || response.data == '401')
+        throw new Error('login proxy returned: ' + response.data);
+
+      // Store securely
+      await Promise.all([
+        Preferences.set({ key: 'auth_token', value: response }),
+        Preferences.set({ key: 'user_data', value: JSON.stringify(username) }),
+        // Preferences.set({ key: 'refresh_token', value: response.data.refreshToken })
+      ]);
+
+      this.token = response.data;
+      this.user = username;
+
+      return response.data as AuthResponse
+    } else {
+      // Web/fallback to $fetch
+      const response = await $fetch<AuthResponse>(`${useRuntimeConfig().public.apiBase}/api/login`, {
+        method: 'POST',
+        body: { username, password },
+      });
+      alert(response);
+
+      if (!response || response == '400' || response == '401')
+        throw new Error('login proxy returned: ' + response);
+
+      // Store securely
+      await Promise.all([
+        Preferences.set({ key: 'auth_token', value: response }),
+        Preferences.set({ key: 'user_data', value: username }),
+        // Preferences.set({ key: 'refresh_token', value: response.refreshToken })
+      ]);
+
+      this.token = response;
+      this.user = username;
+
+      return response;
     }
   }
 
@@ -37,10 +91,17 @@ class AuthService {
 
     console.log('AHH');
 
-    const response = await $fetch<AuthResponse>('http://localhost:3001' + '/api/login-proxy', {
+    const response = await $fetch<AuthResponse>('/api/login-proxy', {
       method: 'POST',
-      body: { email: runtimeUser, password: runtimePassword }
+      body: { email: email, password: password }
+      // body: { email: runtimeUser, password: runtimePassword }
     });
+
+    throw new Error('login proxy returned: ' + response);
+
+    console.log('login proxy response: ', response);
+    if (response == '400' || response == '401')
+      throw new Error('login proxy returned failure: ' + response);
 
     // Store securely
     await Promise.all([

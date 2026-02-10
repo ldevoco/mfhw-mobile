@@ -9,6 +9,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
+      // apiBase: 'https://mfhw.octobeta.com',
       apiBase: process.env.API_BASE_URL || 'http://localhost:4000',
       user: process.env.USER,
       password: process.env.PASSWORD,

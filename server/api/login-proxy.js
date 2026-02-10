@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
   console.log('res: ', res);
 
   if (!res || res == '401')
-    return '400';
+    return res;
 
   setCookie(event, 'auth_token', res, {
     httpOnly: true,

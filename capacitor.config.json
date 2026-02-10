@@ -1,5 +1,14 @@
 {
   "appId": "com.widelime.mfhwion",
   "appName": "MFHW Ionic",
-  "webDir": ".output/public"
+  "webDir": ".output/public",
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": true
+    }
+  },
+  "server": {
+    "androidScheme": "http",
+    "cleartext": true
+  }
 }
