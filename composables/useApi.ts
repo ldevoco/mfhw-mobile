@@ -50,6 +50,7 @@ export function useApi() {
       }
     } catch (err) {
       console.error('API error:', err)
+      alert('error: ' + JSON.stringify(err));
       throw err  // let caller handle (e.g. show toast)
     }
   }

@@ -52,11 +52,12 @@ function formatDate(dateString) {
 <script setup>
 const newsItems = ref([]);
 const { post } = useApi()
+const config = useRuntimeConfig();
 
 async function test() {
   try {
     console.log('testing ');
-    const data = await post('/api/dream/news', {}, {
+    const data = await post(config.public.apiBase + '/api/dream/news', {}, {
       headers: {
         loginToken: localStorage.loginToken
       }
