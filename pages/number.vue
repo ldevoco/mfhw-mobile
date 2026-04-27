@@ -10,6 +10,7 @@
       <ion-button @click="readNumber(171.28)">Read 171.28</ion-button>
       <ion-button @click="readNumber(45)">Read 45</ion-button>
       <ion-button @click="readNumber(378)">Read 378</ion-button>
+      <ion-button @click="rando()">Read random</ion-button>
 
       <audio ref="player"></audio>
     </ion-content>
@@ -20,6 +21,11 @@
 import { ref } from 'vue';
 
 const player = ref(null);
+
+function rando() {
+  const thisOne = (Math.random() * 100).toFixed(2);
+  readNumber(thisOne);
+}
 
 function decomposeNumber(num) {
   const parts = [];
