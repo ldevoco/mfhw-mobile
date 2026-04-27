@@ -7,7 +7,7 @@
     </ion-header>
 
     <ion-content>
-      <ion-button @click="readNumber(102)">Read 102</ion-button>
+      <ion-button @click="readNumber(171.28)">Read 171.28</ion-button>
       <ion-button @click="readNumber(45)">Read 45</ion-button>
       <ion-button @click="readNumber(378)">Read 378</ion-button>
 
@@ -24,23 +24,43 @@ const player = ref(null);
 function decomposeNumber(num) {
   const parts = [];
 
-  if (num >= 100) {
-    parts.push(Math.floor(num / 100));
+  const str = String(num);
+  const [intStr, decStr] = str.split('.');
+
+  // Handle integer part
+  let intNum = Number(intStr);
+
+  if (intNum >= 100) {
+    parts.push(Math.floor(intNum / 100));
     parts.push('hundred');
-    num = num % 100;
+    intNum = intNum % 100;
   }
 
-  if (num >= 20) {
-    parts.push(Math.floor(num / 10) * 10);
-    num = num % 10;
+  if (intNum >= 20) {
+    parts.push(Math.floor(intNum / 10) * 10);
+    intNum = intNum % 10;
+  }
+  else if (intNum >= 11) {
+    parts.push(intNum);
+    intNum = 0;
   }
 
-  if (num > 0) {
-    parts.push(num);
+  if (intNum > 0) {
+    parts.push(intNum);
+  }
+
+  // Handle decimal part
+  if (decStr) {
+    parts.push('point');
+
+    for (const digit of decStr) {
+      parts.push(Number(digit));
+    }
   }
 
   return parts;
 }
+
 
 function readNumber(num) {
   const parts = decomposeNumber(num);
