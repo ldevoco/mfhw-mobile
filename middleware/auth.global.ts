@@ -3,6 +3,7 @@ import { authService } from '~/services/auth.service';
 export default defineNuxtRouteMiddleware(async (to) => {
   const publicRoutes = [
     '/',
+    '/audio',
     '/resources',
     '/tts',
     '/login',
