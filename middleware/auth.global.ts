@@ -4,6 +4,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const publicRoutes = [
     '/',
     '/audio',
+    '/number',
     '/resources',
     '/tts',
     '/login',

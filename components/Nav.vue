@@ -7,6 +7,7 @@
   <ion-button router-link="/users">Users</ion-button>
   <ion-button router-link="/resources">Resources</ion-button>
   <ion-button router-link="/audio">Audio</ion-button>
+  <ion-button router-link="/number">Number</ion-button>
 </template>
 
 <script setup lang="ts">
